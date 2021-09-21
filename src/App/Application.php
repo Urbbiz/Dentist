@@ -1,6 +1,6 @@
 <?php
 
-namespace src\App;
+namespace Dentist\App;
 
 class Application implements ApplicationInterface
 {
