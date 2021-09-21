@@ -2,8 +2,18 @@
 
 namespace Dentist\App;
 
+use Dentist\IO\UserInputInterface;
+use Dentist\IO\UserInputReader;
+
 class Application implements ApplicationInterface
 {
+    private  UserInputInterface $userInputReader;
+
+    public function __construct(UserInputInterface $userInputReader)
+    {
+       $this->userInputReader = $userInputReader;
+    }
+
     public function run()
     {
 
@@ -13,29 +23,29 @@ class Application implements ApplicationInterface
         {
             case 1;
                 echo "Please enter your national ID number","\n";
-                $nationalId = trim(fgets(STDIN,1024));
+                $nationalId = $this->userInputReader->getNationalId();
                 echo "your national ID number is $nationalId.","\n";
 
                 echo "Enter your name","\n";
-                $name = trim(fgets(STDIN,50));
+                $name = $this->userInputReader->getName();
                 echo "your Name is: $name","\n";
 
                 echo "Enter your email","\n";
-                $email = trim(fgets(STDIN, 100));
+                $email = $this->userInputReader->getEmail();
                 echo "your email is: $email","\n";
 
                 echo "Enter your phone number","\n";
-                $phone = trim(fgets(STDIN, 50));
+                $phone = $this->userInputReader->getPhone();
                 echo "your phone number is: $phone","\n";
 
                 echo "Enter appointment date and time","\n";
-                $dateTime = trim(fgets(STDIN, 20));
+                $dateTime = $this->userInputReader->getDateTime();
                 echo "Your appointment confirmed : $dateTime","\n";
                 break;
 
             case 2;
                 echo "Please enter your national ID number for identification","\n";
-                $nationalId = trim(fgets(STDIN,1024));
+                $nationalId = $this->userInputReader->getNationalId();
                 echo "your national ID number is $nationalId.","\n";
 
                 echo"Please change appointment date and time","\n";
@@ -44,8 +54,10 @@ class Application implements ApplicationInterface
                 break;
 
             case 3;
+//            TODO $newTime
+
                 echo "Please enter your national ID number for identification, and your appointment will be deleted!","\n";
-                $nationalId = trim(fgets(STDIN,1024));
+                $nationalId = $this->userInputReader->getNationalId();
                 echo "your national ID number is $nationalId.","\n";
                 break;
 
