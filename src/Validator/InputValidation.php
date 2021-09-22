@@ -26,7 +26,14 @@ class InputValidation implements InputValidationInterface
         return $getName;
     }
 
-    public function email(){}
+    public function email($getEmail):string{
+        if(filter_var($getEmail, FILTER_VALIDATE_EMAIL, FILTER_FLAG_EMAIL_UNICODE)){
+            return $getEmail;
+        }elseif ($getEmail == null){
+            return 1;
+        } else
+            return false;
+    }
 
     public function phone(){}
 

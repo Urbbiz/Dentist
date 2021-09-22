@@ -8,7 +8,7 @@ interface InputValidationInterface
 
   public function name($getName):string;
 
-  public function email();
+  public function email($getEmail):string;
 
   public function phone();
 

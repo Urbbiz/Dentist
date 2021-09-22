@@ -49,8 +49,16 @@ class UserInputReader implements UserInputInterface
 
     public function getEmail():string
     {
-        $email = trim(fgets(STDIN, 100));
-        return $email;
+        do {
+            $email = trim(fgets(STDIN, 100));
+            $result = $this->inputValidation->email($email);
+            if($result == false){
+                echo "Please enter valid email address and try again! ";
+            }elseif ($result == 1){
+                echo "Error! You didn't enter email.";
+            }
+        }while ($result == false || $result == 1);
+        return $result;
     }
 
     public  function  getPhone():string
