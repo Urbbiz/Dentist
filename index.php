@@ -2,11 +2,14 @@
 
 use Dentist\App\Application;
 use Dentist\IO\UserInputReader;
+use Dentist\Validator\InputValidation;
 
 
 require_once __DIR__.'/vendor/autoload.php';
 
-$userInputReader = new UserInputReader();
+
+
+$userInputReader = new UserInputReader(new InputValidation());
 
 
 echo "Hello! Follow instructions below:","\n";
