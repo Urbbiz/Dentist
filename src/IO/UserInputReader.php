@@ -77,7 +77,17 @@ class UserInputReader implements UserInputInterface
 
     public function getDateTime():string
     {
-        $dateTime = trim(fgets(STDIN, 20));
-        return $dateTime;
+        $result = null;
+
+        do {
+            $input = trim(fgets(STDIN, 1024));
+            $result=  $this->inputValidation->dateTime($input);
+            if($result == false){
+                echo "date format is incorrect! Use YYYY-MM-DD H:MM , Only numbers are allowed!";
+            } elseif ($result == 1){
+                echo "Error! You didn't enter date and time.";
+            }
+        } while ($result == false || $result == 1 );
+        return $result;
     }
 }

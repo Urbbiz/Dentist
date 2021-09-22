@@ -12,5 +12,5 @@ interface InputValidationInterface
 
   public function phone($getPhone):string;
 
-  public function dateTime();
+  public function dateTime($getDateTime);
 }
