@@ -35,7 +35,14 @@ class InputValidation implements InputValidationInterface
             return false;
     }
 
-    public function phone(){}
+    public function phone($getPhone, int $minDigits = 5, int $maxDigits = 10):string{
+        if ($getPhone == null){
+            return 1;
+        }elseif (!preg_match('/^[0-9]{'.$minDigits.','.$maxDigits.'}\z/',$getPhone)){
+            return false;
+        } else
+        return $getPhone;
+    }
 
     public function dateTime(){}
 }

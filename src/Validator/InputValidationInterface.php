@@ -10,7 +10,7 @@ interface InputValidationInterface
 
   public function email($getEmail):string;
 
-  public function phone();
+  public function phone($getPhone):string;
 
   public function dateTime();
 }

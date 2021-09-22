@@ -63,9 +63,16 @@ class UserInputReader implements UserInputInterface
 
     public  function  getPhone():string
     {
-        $phone = trim(fgets(STDIN, 50));
-
-        return $phone;
+        do {
+            $phone = trim(fgets(STDIN, 100));
+            $result = $this->inputValidation->phone($phone);
+            if($result == false){
+                echo "Error, use only numbers. Number length from 5 to 10 symbols!  ";
+            }elseif ($result == 1){
+                echo "Error! You didn't enter phone number.";
+            }
+        }while ($result == false || $result == 1);
+        return $result;
     }
 
     public function getDateTime():string
