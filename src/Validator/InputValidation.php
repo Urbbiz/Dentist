@@ -2,11 +2,10 @@
 
 namespace Dentist\Validator;
 
-use Dentist\IO\UserInputReader;
 
 class InputValidation implements InputValidationInterface
 {
-    public function nationalId($getNationalId)
+    public function nationalId($getNationalId):string
     {
         if ($getNationalId == null){
             return 1;
@@ -17,7 +16,15 @@ class InputValidation implements InputValidationInterface
         }
     }
 
-    public function name(){}
+    public function name($getName):string
+    {
+        if($getName == null){
+            return 1;
+        }elseif (!preg_match("/^[a-zA-Z-' ]{2,50}$/",$getName)){
+            return false;
+        }else
+        return $getName;
+    }
 
     public function email(){}
 

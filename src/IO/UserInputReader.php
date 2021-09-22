@@ -24,9 +24,9 @@ class UserInputReader implements UserInputInterface
             $result = $this->inputValidation->nationalId($nationalId);
 
             if($result == false) {
-                echo "Only letters and white space allowed! try again: ";
+                echo "Error! Id contains 2 capital Letters, ans 11 digits  LLXXXXXXXXXXX. Please try again:";
             }elseif ($result == 1){
-                echo "Error! You didn't enter name.";
+                echo "Error! You didn't enter national id.";
             }
         }while($result == false || $result == 1);
 
@@ -35,9 +35,16 @@ class UserInputReader implements UserInputInterface
 
     public function getName() :string
     {
-        $name = trim(fgets(STDIN,50));
-
-        return $name;
+      do {
+          $name = trim(fgets(STDIN, 50));
+          $result = $this->inputValidation->name($name);
+          If($result == false){
+              echo "Minimum 2 symbols. Only letters and white spaces allowed! Try again. ";
+          }elseif ($result == 1){
+             echo "Error! You didn't enter name.";
+          }
+      }while($result == 1 || $result == false);
+        return $result;
     }
 
     public function getEmail():string
