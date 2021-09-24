@@ -3,7 +3,7 @@
 namespace Dentist\App;
 
 use Dentist\IO\UserInputInterface;
-use Dentist\IO\UserInputReader;
+
 
 class Application implements ApplicationInterface
 {
