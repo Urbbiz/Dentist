@@ -2,16 +2,20 @@
 
 namespace Dentist\App;
 
+use Dentist\Database\DatabaseManager;
 use Dentist\IO\UserInputInterface;
+
 
 
 class Application implements ApplicationInterface
 {
     private  UserInputInterface $userInputReader;
+    private  DatabaseManager $databaseManager;
 
-    public function __construct(UserInputInterface $userInputReader)
+    public function __construct(UserInputInterface $userInputReader, DatabaseManager $databaseManager)
     {
        $this->userInputReader = $userInputReader;
+       $this->databaseManager = $databaseManager;
     }
 
     public function run()
@@ -41,6 +45,8 @@ class Application implements ApplicationInterface
                 echo "Enter appointment date and time","\n";
                 $dateTime = $this->userInputReader->getDateTime();
                 echo "Your appointment confirmed : $dateTime","\n";
+
+                $this->databaseManager->addPatient($nationalId,$name,$email,$phone,$dateTime);
                 break;
 
             case 2;
