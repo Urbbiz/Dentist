@@ -3,6 +3,7 @@
 namespace Dentist\Database;
 
 Use PDO;
+use phpDocumentor\Reflection\Types\Boolean;
 
 
 class DatabaseManager extends Database
@@ -14,4 +15,14 @@ public function addPatient($nationalId, $name, $email, $phone, $dateTime)
     $statement->execute([$nationalId, $name, $email, $phone, $dateTime]);
 }
 
+public function compareNationalIDwithDb($nationalId)
+{
+    $sql = "SELECT id, nationalId FROM patient";
+    $result = $this->connect()->query($sql);
+    while ($row = $result->fetch()) {
+        if ($row["nationalId"] == $nationalId) {
+            return true;
+        }
+    }
+}
 }
