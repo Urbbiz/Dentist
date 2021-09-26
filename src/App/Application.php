@@ -28,6 +28,10 @@ class Application implements ApplicationInterface
             case 1;
                 echo "Please enter your national ID number","\n";
                 $nationalId = $this->userInputReader->getNationalId();
+//                if ($nationalId == $dbNationalId){
+//                    echo "You already have appointment. Go to section 2 --Edit appointment.";
+//                    break;
+//                }else
                 echo "your national ID number is $nationalId.","\n";
 
                 echo "Enter your name","\n";
