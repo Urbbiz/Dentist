@@ -28,10 +28,10 @@ class Application implements ApplicationInterface
             case 1;
                 echo "Please enter your national ID number","\n";
                 $nationalId = $this->userInputReader->getNationalId();
-//                if ($nationalId == $dbNationalId){
-//                    echo "You already have appointment. Go to section 2 --Edit appointment.";
-//                    break;
-//                }else
+                if ($this->databaseManager->compareNationalIDwithDb($nationalId) == true){
+                    echo "You already have appointment. Go to section 2 --Edit appointment.";
+                    break;
+                }else
                 echo "your national ID number is $nationalId.","\n";
 
                 echo "Enter your name","\n";
@@ -56,7 +56,7 @@ class Application implements ApplicationInterface
             case 2;
                 echo "Please enter your national ID number for identification","\n";
                 $nationalId = $this->userInputReader->getNationalId();
-                echo "your national ID number is $nationalId.","\n";
+                $this->databaseManager->getNationalID($nationalId);
 
                 echo"Please change appointment date and time","\n";
                 $newDateTime = trim(fgets(STDIN, 20));
