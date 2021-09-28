@@ -34,17 +34,17 @@ public function editDateTime($newDateTime, $nationalId)
     $statement->execute([$newDateTime, $nationalId]);
 }
 
-public function deletePatient($nationalId)
-{
-    try {
-        $sql = "DELETE FROM patient WHERE nationalId ='$nationalId'";
 
+public function deleteDateTime($nationalId)
+{
+    $statement = $this->connect()->prepare("UPDATE patient SET datetime=NULL WHERE nationalId=?");
+    $statement->execute([$nationalId]);
+}
+
+public function deletePatient($nationalId):void
+{
+        $sql = "DELETE FROM patient WHERE nationalId ='$nationalId'";
         $this->connect()->exec($sql);
         echo "Patient deleted successfully";
-    } catch (PDOException $e) {
-        echo $sql . "<br>" . $e->getMessage();
-    }
-
-
 }
 }

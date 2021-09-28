@@ -66,14 +66,15 @@ class Application implements ApplicationInterface
 
                     break;
                 }else
-                   Echo "You are not in our database. Please chose 1 from main menu, and create your appointment!";
+                   Echo "You are not in our database. Please choose 1 from main menu, and create your appointment!";
                 break;
 
             case 3;
 //            TODO $newTime
                 echo "Please enter your national ID number for identification, and your appointment will be deleted!","\n";
                 $nationalId = $this->userInputReader->getNationalId();
-                echo "your national ID number is $nationalId.","\n";
+                $this->databaseManager->deleteDateTime($nationalId);
+                echo "your appointment date and time deleted!!! If you want to set new appointment , go back and choose 2.","\n";
                 break;
 
             case 4;
