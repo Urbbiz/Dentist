@@ -16,6 +16,15 @@ public function addPatient($nationalId, $name, $email, $phone, $dateTime)
     $statement->execute([$nationalId, $name, $email, $phone, $dateTime]);
 }
 
+public function getAllData()
+{
+    $sql = "SELECT * FROM patient";
+    $result = $this->connect()->query($sql);
+    while($row = $result->fetch())
+    {
+        echo "ID:".$row["nationalId"].". NAME:".$row["name"].". EMAIL:".$row["email"].". PHONE:".$row["phone"].". DATE AND TIME:".$row["datetime"]."\n";
+    }
+}
 public function compareNationalIDwithDb($nationalId)
 {
     $sql = "SELECT id, nationalId FROM patient";

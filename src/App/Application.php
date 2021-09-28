@@ -91,7 +91,10 @@ class Application implements ApplicationInterface
                 break;
 
             case  5;
-                echo "You reached medical personnel data";
+                echo "You reached medical personnel data"."\n"."\n";
+                echo "SEE ALL LIST OF PATIENTS"."\n";
+                $this->databaseManager->getAllData();
+
                 break;
 
         }
