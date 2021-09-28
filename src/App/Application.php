@@ -66,16 +66,19 @@ class Application implements ApplicationInterface
 
                     break;
                 }else
-                   Echo "You are not in our database. Please chose 1 from main menu, and create your appointment!";
+                   Echo "You are not in our database. Please choose 1 from main menu, and create your appointment!";
                 break;
 
             case 3;
 //            TODO $newTime
                 echo "Please enter your national ID number for identification, and your appointment will be deleted!","\n";
                 $nationalId = $this->userInputReader->getNationalId();
-                echo "your national ID number is $nationalId.","\n";
-                break;
-
+                if ($this->databaseManager->compareNationalIDwithDb($nationalId) == true){
+                    $this->databaseManager->deleteDateTime($nationalId);
+                    echo "your appointment date and time deleted!!! If you want to set new appointment , go back and choose 2.","\n";
+                    break;
+                }else
+                    Echo "Nothing to delete.You are not in our database!!!";
             case 4;
                 echo "Please enter your national ID number for identification, and your account will be deleted!","\n";
                 $nationalId = $this->userInputReader->getNationalId();
@@ -86,7 +89,6 @@ class Application implements ApplicationInterface
                 }else
                     Echo "Nothing to delete.You are not in our database!!!";
                 break;
-
 
             case  5;
                 echo "You reached medical personnel data";
