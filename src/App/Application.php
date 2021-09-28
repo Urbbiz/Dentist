@@ -61,6 +61,7 @@ class Application implements ApplicationInterface
 
                     echo"Please change appointment date and time","\n";
                     $newDateTime = trim(fgets(STDIN, 20));
+                    $this->databaseManager->editDateTime($newDateTime, $nationalId);
                     echo "New appointment date and time is: $newDateTime";
 
                     break;

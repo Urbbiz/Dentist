@@ -27,6 +27,13 @@ public function compareNationalIDwithDb($nationalId)
     }
 }
 
+public function editDateTime($newDateTime, $nationalId)
+{
+//    $sql = "UPDATE patient SET datetime=? WHERE nationalId='$nationalId'";
+    $statement = $this->connect()->prepare("UPDATE patient SET datetime=? WHERE nationalId=?");
+    $statement->execute([$newDateTime, $nationalId]);
+}
+
 public function deletePatient($nationalId)
 {
     try {
