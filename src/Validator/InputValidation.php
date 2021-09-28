@@ -44,7 +44,7 @@ class InputValidation implements InputValidationInterface
         return $getPhone;
     }
 
-    public function dateTime($getDateTime){
+    public function dateTime($getDateTime):string{
 
 
         if($timestamp = $getDateTime==null) {
