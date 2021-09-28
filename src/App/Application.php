@@ -56,22 +56,38 @@ class Application implements ApplicationInterface
             case 2;
                 echo "Please enter your national ID number for identification","\n";
                 $nationalId = $this->userInputReader->getNationalId();
-                $this->databaseManager->getNationalID($nationalId);
+                if ($this->databaseManager->compareNationalIDwithDb($nationalId) == true){
+                    echo "your national ID number is $nationalId.","\n";
 
-                echo"Please change appointment date and time","\n";
-                $newDateTime = trim(fgets(STDIN, 20));
-                echo "New appointment date and time is: $newDateTime";
+                    echo"Please change appointment date and time","\n";
+                    $newDateTime = trim(fgets(STDIN, 20));
+                    echo "New appointment date and time is: $newDateTime";
+
+                    break;
+                }else
+                   Echo "You are not in our database. Please chose 1 from main menu, and create your appointment!";
                 break;
 
             case 3;
 //            TODO $newTime
-
                 echo "Please enter your national ID number for identification, and your appointment will be deleted!","\n";
                 $nationalId = $this->userInputReader->getNationalId();
                 echo "your national ID number is $nationalId.","\n";
                 break;
 
-            case  4;
+            case 4;
+                echo "Please enter your national ID number for identification, and your account will be deleted!","\n";
+                $nationalId = $this->userInputReader->getNationalId();
+                if ($this->databaseManager->compareNationalIDwithDb($nationalId) == true){
+                    $this->databaseManager->deletePatient($nationalId);
+                    echo "Account DELETED!","\n";
+                    break;
+                }else
+                    Echo "Nothing to delete.You are not in our database!!!";
+                break;
+
+
+            case  5;
                 echo "You reached medical personnel data";
                 break;
 

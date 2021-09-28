@@ -3,6 +3,7 @@
 namespace Dentist\Database;
 
 Use PDO;
+use PDOException;
 use phpDocumentor\Reflection\Types\Boolean;
 
 
@@ -24,5 +25,19 @@ public function compareNationalIDwithDb($nationalId)
             return true;
         }
     }
+}
+
+public function deletePatient($nationalId)
+{
+    try {
+        $sql = "DELETE FROM patient WHERE nationalId ='$nationalId'";
+
+        $this->connect()->exec($sql);
+        echo "Patient deleted successfully";
+    } catch (PDOException $e) {
+        echo $sql . "<br>" . $e->getMessage();
+    }
+
+
 }
 }
