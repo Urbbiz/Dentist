@@ -8,7 +8,7 @@ use PDOException;
 class Database
 {
     private string $userName = "root";
-    private  string $serverName = "localhost";
+    private string $serverName = "localhost";
     private string $password = "";
     private string $database = "dentist";
     private string $charset = "utf8mb4";  //default set
@@ -26,8 +26,7 @@ class Database
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             return $pdo;
         } catch (PDOException $e) {
-            echo "CONNECTION FAILED: ". $e->getMessage();
+            echo "CONNECTION FAILED: " . $e->getMessage();
         }
     }
-
 }
