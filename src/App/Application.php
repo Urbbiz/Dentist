@@ -3,19 +3,22 @@
 namespace Dentist\App;
 
 use Dentist\Database\DatabaseManager;
+use Dentist\Database\ExportData;
 use Dentist\IO\UserInputInterface;
-
+use PhpParser\Node\Stmt\Echo_;
 
 
 class Application implements ApplicationInterface
 {
     private  UserInputInterface $userInputReader;
     private  DatabaseManager $databaseManager;
+    private ExportData $exportData;
 
-    public function __construct(UserInputInterface $userInputReader, DatabaseManager $databaseManager)
+    public function __construct(UserInputInterface $userInputReader, DatabaseManager $databaseManager, ExportData $exportData)
     {
        $this->userInputReader = $userInputReader;
        $this->databaseManager = $databaseManager;
+       $this->exportData = $exportData;
     }
 
     public function run()
@@ -92,8 +95,24 @@ class Application implements ApplicationInterface
 
             case  5;
                 echo "You reached medical personnel data"."\n"."\n";
-                echo "SEE ALL LIST OF PATIENTS"."\n";
-                $this->databaseManager->getAllData();
+                echo "Choose what you want to do:"."\n";
+                echo "Enter: 1 --Print data to teh screen"."\n";
+                echo "Enter: 2 --download data to CSV file "."\n";
+
+                $input = trim(fgets(STDIN,10));
+                if($input == 1) {
+                    echo "SEE ALL LIST OF PATIENTS" . "\n";
+                    $this->databaseManager->getAllData();
+                } elseif ($input == 2) {
+                    $this->exportData->exportDataToCSV();
+                    echo "Your data downloaded successfully!";
+                }else
+                    echo "You entered invalid input!!!";
+
+
+
+
+
 
                 break;
 
