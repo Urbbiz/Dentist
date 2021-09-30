@@ -2,6 +2,7 @@
 
 namespace Dentist\Database;
 
+use Dentist\Models\Patient;
 use PDO;
 use PDOException;
 use phpDocumentor\Reflection\Types\Boolean;
@@ -15,13 +16,28 @@ class DatabaseManager  extends Database implements DatabaseManagerInterface
         $statement->execute([$nationalId, $name, $email, $phone, $dateTime]);
     }
 
-    public function getAllData()
+    public function getAllData():Patient
     {
+//        $sql = "SELECT * FROM patient";
+//        $result = $this->connect()->query($sql);
+//        while ($row = $result->fetch()) {
+//            echo "ID:" . $row["nationalId"] . ". NAME:" . $row["name"] . ". EMAIL:" . $row["email"] . ". PHONE:" . $row["phone"] . ". DATE AND TIME:" . $row["datetime"] . "\n";
+//        }
+
         $sql = "SELECT * FROM patient";
-        $result = $this->connect()->query($sql);
-        while ($row = $result->fetch()) {
-            echo "ID:" . $row["nationalId"] . ". NAME:" . $row["name"] . ". EMAIL:" . $row["email"] . ". PHONE:" . $row["phone"] . ". DATE AND TIME:" . $row["datetime"] . "\n";
+        $statement = $this->connect()->query($sql);
+        $patients = [];
+        while ($row = $statement->fetch()) {
+            $patient = new Patient();
+            $patient->id= $row['id'];
+            $patient->nationalId = $row['nationalId'];
+            $patient->name = $row['name'];
+            $patient->email = $row['email'];
+            $patient->phone = $row['phone'];
+            $patient->dateTime = $row['datetime'];
+            $patients[] = $patient;
         }
+        return $patients;
     }
     public function compareNationalIDwithDb($nationalId)
     {
