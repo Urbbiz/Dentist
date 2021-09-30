@@ -2,7 +2,6 @@
 
 namespace Dentist\App;
 
-use Dentist\Database\DatabaseManager;
 use Dentist\Database\DatabaseManagerInterface;
 use Dentist\Database\ExportData;
 use Dentist\IO\UserInputInterface;
@@ -53,8 +52,8 @@ class Application implements ApplicationInterface
     {
         echo "Please enter your national ID number","\n";
         $nationalId = $this->userInputReader->getNationalId();
-        if ($this->databaseManager->compareNationalIDwithDb($nationalId) == true) {
-            echo "You already have appointment. Go to section 2 --Edit appointment.";
+            if ($this->databaseManager->getUserByNationalId($nationalId) !=null ) {
+            echo "You already have appointment at:" .$this->databaseManager->getUserByNationalId($nationalId)->dateTime."! Go to section 2 --Edit appointment.";
         } else {
             echo "your national ID number is $nationalId.", "\n";
 
@@ -128,7 +127,11 @@ class Application implements ApplicationInterface
         $input = trim(fgets(STDIN, 10));
         if ($input == 1) {
             echo "SEE ALL LIST OF PATIENTS" . "\n";
-            $this->databaseManager->getAllData();
+            $patients = $this->databaseManager->getAllData();
+            foreach ($patients as $patient) {
+                echo "ID:" . $patient->nationalId . ". NAME:" . $patient->name . ". EMAIL:" . $patient->email . ". PHONE:" . $patient->phone . ". DATE AND TIME:" . $patient->dateTime . "\n";
+            }
+//        }
         } elseif ($input == 2) {
             $this->exportData->exportDataToCSV();
             echo "Your data downloaded successfully!";

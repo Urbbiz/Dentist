@@ -15,6 +15,6 @@ $userInputReader = new UserInputReader(new InputValidation());
 $databaseManager = new DatabaseManager();
 $exportData = new ExportData();
 
-us
+
 $runApp = new Application($userInputReader, $databaseManager, $exportData);
 $runApp->run();

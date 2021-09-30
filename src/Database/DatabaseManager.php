@@ -9,6 +9,7 @@ use phpDocumentor\Reflection\Types\Boolean;
 
 class DatabaseManager  extends Database implements DatabaseManagerInterface
 {
+    public array $patients=[];
 //PUT DATA TO DB
     public function addPatient($nationalId, $name, $email, $phone, $dateTime)
     {
@@ -16,20 +17,13 @@ class DatabaseManager  extends Database implements DatabaseManagerInterface
         $statement->execute([$nationalId, $name, $email, $phone, $dateTime]);
     }
 
-    public function getAllData():Patient
+    public function getAllData():array
     {
-//        $sql = "SELECT * FROM patient";
-//        $result = $this->connect()->query($sql);
-//        while ($row = $result->fetch()) {
-//            echo "ID:" . $row["nationalId"] . ". NAME:" . $row["name"] . ". EMAIL:" . $row["email"] . ". PHONE:" . $row["phone"] . ". DATE AND TIME:" . $row["datetime"] . "\n";
-//        }
-
         $sql = "SELECT * FROM patient";
         $statement = $this->connect()->query($sql);
         $patients = [];
         while ($row = $statement->fetch()) {
             $patient = new Patient();
-            $patient->id= $row['id'];
             $patient->nationalId = $row['nationalId'];
             $patient->name = $row['name'];
             $patient->email = $row['email'];
@@ -39,6 +33,7 @@ class DatabaseManager  extends Database implements DatabaseManagerInterface
         }
         return $patients;
     }
+
     public function compareNationalIDwithDb($nationalId)
     {
         $sql = "SELECT id, nationalId FROM patient";
@@ -48,6 +43,24 @@ class DatabaseManager  extends Database implements DatabaseManagerInterface
                 return true;
             }
         }
+    }
+
+    public function getUserByNationalId($nationalId):?Patient
+    {
+        $statement = $this->connect()->prepare("SELECT * FROM patient WHERE nationalId=?");
+        $statement->execute([$nationalId]);
+
+        $row = $statement->fetch();
+        if ($row != false){
+            $patient = new Patient();
+            $patient->nationalId = $row['nationalId'];
+            $patient->name = $row['name'];
+            $patient->email = $row['email'];
+            $patient->phone = $row['phone'];
+            $patient->dateTime = $row['datetime'];
+            return $patient;
+        }
+        return null;
     }
 
     public function editDateTime($newDateTime, $nationalId)
