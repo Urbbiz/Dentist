@@ -3,9 +3,6 @@
 namespace Dentist\Database;
 
 use Dentist\Models\Patient;
-use PDO;
-use PDOException;
-use phpDocumentor\Reflection\Types\Boolean;
 
 class DatabaseManager  extends Database implements DatabaseManagerInterface
 {
@@ -34,17 +31,6 @@ class DatabaseManager  extends Database implements DatabaseManagerInterface
         return $patients;
     }
 
-    public function compareNationalIDwithDb($nationalId)
-    {
-        $sql = "SELECT id, nationalId FROM patient";
-        $result = $this->connect()->query($sql);
-        while ($row = $result->fetch()) {
-            if ($row["nationalId"] == $nationalId) {
-                return true;
-            }
-        }
-    }
-
     public function getUserByNationalId($nationalId):?Patient
     {
         $statement = $this->connect()->prepare("SELECT * FROM patient WHERE nationalId=?");
@@ -63,7 +49,7 @@ class DatabaseManager  extends Database implements DatabaseManagerInterface
         return null;
     }
 
-    public function editDateTime($newDateTime, $nationalId)
+    public function editDateTime($newDateTime, $nationalId):void
     {
 //    $sql = "UPDATE patient SET datetime=? WHERE nationalId='$nationalId'";
         $statement = $this->connect()->prepare("UPDATE patient SET datetime=? WHERE nationalId=?");
@@ -71,7 +57,7 @@ class DatabaseManager  extends Database implements DatabaseManagerInterface
     }
 
 
-    public function deleteDateTime($nationalId)
+    public function deleteDateTime($nationalId):void
     {
         $statement = $this->connect()->prepare("UPDATE patient SET datetime=NULL WHERE nationalId=?");
         $statement->execute([$nationalId]);

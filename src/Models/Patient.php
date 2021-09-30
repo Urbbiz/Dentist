@@ -8,5 +8,5 @@ class Patient
     public string $name;
     public string $email;
     public string $phone;
-    public string $dateTime;
+    public ?string $dateTime;
 }

@@ -81,7 +81,7 @@ class Application implements ApplicationInterface
     {
         echo "Please enter your national ID number for identification","\n";
         $nationalId = $this->userInputReader->getNationalId();
-        if ($this->databaseManager->compareNationalIDwithDb($nationalId) == true) {
+        if ($this->databaseManager->getUserByNationalId($nationalId) !=null) {
             echo "your national ID number is $nationalId.","\n";
 
             echo"Please change appointment date and time","\n";
@@ -97,7 +97,7 @@ class Application implements ApplicationInterface
     {
         echo "Please enter your national ID number for identification, and your appointment will be deleted!","\n";
         $nationalId = $this->userInputReader->getNationalId();
-        if ($this->databaseManager->compareNationalIDwithDb($nationalId) == true) {
+        if ($this->databaseManager->getUserByNationalId($nationalId) !=null) {
             $this->databaseManager->deleteDateTime($nationalId);
             echo "your appointment date and time deleted!!! If you want to set new appointment , go back and choose 2.","\n";
         } else {
@@ -109,7 +109,7 @@ class Application implements ApplicationInterface
     {
         echo "Please enter your national ID number for identification, and your account will be deleted!","\n";
         $nationalId = $this->userInputReader->getNationalId();
-        if ($this->databaseManager->compareNationalIDwithDb($nationalId) == true) {
+        if ($this->databaseManager->getUserByNationalId($nationalId) !=null) {
             $this->databaseManager->deletePatient($nationalId);
             echo "Account DELETED!","\n";
         } else {

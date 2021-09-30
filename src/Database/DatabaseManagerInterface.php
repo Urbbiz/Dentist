@@ -10,13 +10,11 @@ interface DatabaseManagerInterface
 
     public function getAllData():array;
 
-    public function compareNationalIDwithDb($nationalId);
-
     public function getUserByNationalId($nationalId):?Patient;
 
-    public function editDateTime($newDateTime, $nationalId);
+    public function editDateTime($newDateTime, $nationalId):void;
 
-    public function deleteDateTime($nationalId);
+    public function deleteDateTime($nationalId):void;
 
     public function deletePatient($nationalId): void;
 }
