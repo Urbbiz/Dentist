@@ -21,6 +21,13 @@ class Application implements ApplicationInterface
 
     public function run()
     {
+        echo "Hello! Follow instructions below:","\n";
+        echo "Enter: 1 --Register new appointment. ","\n";
+        echo "Enter: 2 --Edit appointment.","\n";
+        echo "Enter: 3 --Delete appointment.","\n";
+        echo "Enter: 4 --Delete account.","\n";
+        echo "Enter: 5 -- Only for medical personnel","\n";
+
         $input = trim(fgets(STDIN, 10));
         switch ($input) {
             case 1:
@@ -48,25 +55,26 @@ class Application implements ApplicationInterface
         if ($this->databaseManager->compareNationalIDwithDb($nationalId) == true) {
             echo "You already have appointment. Go to section 2 --Edit appointment.";
         } else {
-            echo "your national ID number is $nationalId.","\n";
-        }
-            echo "Enter your name","\n";
+            echo "your national ID number is $nationalId.", "\n";
+
+            echo "Enter your name", "\n";
             $name = $this->userInputReader->getName();
-            echo "your Name is: $name","\n";
+            echo "your Name is: $name", "\n";
 
-            echo "Enter your email","\n";
+            echo "Enter your email", "\n";
             $email = $this->userInputReader->getEmail();
-            echo "your email is: $email","\n";
+            echo "your email is: $email", "\n";
 
-            echo "Enter your phone number","\n";
+            echo "Enter your phone number", "\n";
             $phone = $this->userInputReader->getPhone();
-            echo "your phone number is: $phone","\n";
+            echo "your phone number is: $phone", "\n";
 
-            echo "Enter appointment date and time","\n";
+            echo "Enter appointment date and time", "\n";
             $dateTime = $this->userInputReader->getDateTime();
-            echo "Your appointment confirmed : $dateTime","\n";
+            echo "Your appointment confirmed : $dateTime", "\n";
 
             $this->databaseManager->addPatient($nationalId, $name, $email, $phone, $dateTime);
+        }
     }
 
     private function editAppointment()

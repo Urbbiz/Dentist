@@ -6,7 +6,7 @@ use PDO;
 use PDOException;
 use phpDocumentor\Reflection\Types\Boolean;
 
-class DatabaseManager extends Database
+class DatabaseManager  extends Database implements DatabaseManagerInterface
 {
 //PUT DATA TO DB
     public function addPatient($nationalId, $name, $email, $phone, $dateTime)
