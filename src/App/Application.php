@@ -3,16 +3,17 @@
 namespace Dentist\App;
 
 use Dentist\Database\DatabaseManager;
+use Dentist\Database\DatabaseManagerInterface;
 use Dentist\Database\ExportData;
 use Dentist\IO\UserInputInterface;
 
 class Application implements ApplicationInterface
 {
     private UserInputInterface $userInputReader;
-    private DatabaseManager $databaseManager;
+    private DatabaseManagerInterface $databaseManager;
     private ExportData $exportData;
 
-    public function __construct(UserInputInterface $userInputReader, DatabaseManager $databaseManager, ExportData $exportData)
+    public function __construct(UserInputInterface $userInputReader,DatabaseManagerInterface $databaseManager, ExportData $exportData)
     {
         $this->userInputReader = $userInputReader;
         $this->databaseManager = $databaseManager;
