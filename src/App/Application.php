@@ -3,20 +3,20 @@
 namespace Dentist\App;
 
 use Dentist\Database\DatabaseManagerInterface;
-use Dentist\Database\ExportData;
+use Dentist\Export\CsvWriterInterface;
 use Dentist\IO\UserInputInterface;
 
 class Application implements ApplicationInterface
 {
     private UserInputInterface $userInputReader;
     private DatabaseManagerInterface $databaseManager;
-    private ExportData $exportData;
+    private CsvWriterInterface $csvWriter;
 
-    public function __construct(UserInputInterface $userInputReader,DatabaseManagerInterface $databaseManager, ExportData $exportData)
+    public function __construct(UserInputInterface $userInputReader, DatabaseManagerInterface $databaseManager, CsvWriterInterface $csvWriter)
     {
         $this->userInputReader = $userInputReader;
         $this->databaseManager = $databaseManager;
-        $this->exportData = $exportData;
+        $this->csvWriter = $csvWriter;
     }
 
     public function run()
@@ -133,7 +133,8 @@ class Application implements ApplicationInterface
             }
 //        }
         } elseif ($input == 2) {
-            $this->exportData->exportDataToCSV();
+            $patients = $this->databaseManager->getAllData();
+            $this->csvWriter->exportDataToCSV($patients);
             echo "Your data downloaded successfully!";
         } else {
             echo "You entered invalid input!!!";

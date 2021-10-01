@@ -1,14 +1,11 @@
 <?php
 
-namespace Dentist\Database;
+namespace Dentist\Export;
 
-class ExportData extends Database
+class CsvWriter implements CsvWriterInterface
 {
-    public function exportDataToCSV()
+    public function exportDataToCSV($patients):void
     {
-        //Fetch record from database
-        $query = $this->connect()->query("SELECT * FROM patient ORDER BY datetime ASC");
-
         $delimiter = ",";
         $filename = "patient-data_" . date('Y-m-d') . ".csv";
 
@@ -20,8 +17,8 @@ class ExportData extends Database
         fputcsv($f, $fields, $delimiter);
 
         // Output each row of the data, format line as csv and write to file pointer
-        while ($row = $query->fetch()) {
-            $lineData = [$row["nationalId"],$row["name"],$row["email"],$row["phone"],$row["datetime"]];
+        foreach ($patients as $patient) {
+            $lineData = [ $patient->nationalId, $patient->name, $patient->email, $patient->phone, $patient->dateTime ];
             fputcsv($f, $lineData, $delimiter);
         }
         // Move back to beginning of file
