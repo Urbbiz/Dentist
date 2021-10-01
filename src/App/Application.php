@@ -22,30 +22,24 @@ class Application implements ApplicationInterface
     public function run():void
     {
         echo "Hello! Follow instructions below:", "\n";
-        $this->showMenu();
-
         do {
+            $this->showMenu();
             $input = trim(fgets(STDIN, 10));
             switch ($input) {
                 case 1:
                     $this->register();
-                    $this->showMenu();
                     break;
                 case 2:
                     $this->editAppointment();
-                    $this->showMenu();
                     break;
                 case 3:
                     $this->deleteAppointment();
-                    $this->showMenu();
                     break;
                 case 4;
                     $this->deleteAccount();
-                    $this->showMenu();
                     break;
                 case 5;
                     $this->forMedicalPersonnel();
-                    $this->showMenu();
                     break;
                 case 6;
                     echo "BYE!!!";
@@ -58,7 +52,8 @@ class Application implements ApplicationInterface
     {
         echo "Please enter your national ID number","\n";
         $nationalId = $this->userInputReader->getNationalId();
-            if ($this->databaseManager->getUserByNationalId($nationalId) !=null ) {
+        $userByNationalId = $this->databaseManager->getUserByNationalId($nationalId);
+            if ( $userByNationalId !=null ) {
             echo "You already have appointment at:" .$this->databaseManager->getUserByNationalId($nationalId)->dateTime."! Go to section 2 --Edit appointment.";
         } else {
             echo "your national ID number is $nationalId.", "\n";
@@ -87,15 +82,16 @@ class Application implements ApplicationInterface
     {
         echo "Please enter your national ID number for identification","\n";
         $nationalId = $this->userInputReader->getNationalId();
-        if ($this->databaseManager->getUserByNationalId($nationalId) !=null) {
-            echo "your national ID number is $nationalId.","\n";
+        $userByNationalId = $this->databaseManager->getUserByNationalId($nationalId);
+        if ($userByNationalId !=null) {
+            echo "your current appointment is:  $userByNationalId->dateTime.","\n";
 
             echo"Please change appointment date and time","\n";
             $newDateTime = trim(fgets(STDIN, 20));
             $this->databaseManager->editDateTime($newDateTime, $nationalId);
             echo "New appointment date and time is: $newDateTime";
         } else {
-            echo "You are not in our database. Please choose 1 from main menu, and create your appointment!";
+            echo "You are not in our database. Please choose 1 from main menu, and create your appointment!"."\n";
         }
     }
 
@@ -112,7 +108,8 @@ class Application implements ApplicationInterface
     {
         echo "Please enter your national ID number for identification, and your appointment will be deleted!","\n";
         $nationalId = $this->userInputReader->getNationalId();
-        if ($this->databaseManager->getUserByNationalId($nationalId) !=null) {
+        $userByNationalId = $this->databaseManager->getUserByNationalId($nationalId);
+        if ($userByNationalId !=null) {
             $this->databaseManager->deleteDateTime($nationalId);
             echo "your appointment date and time deleted!!! If you want to set new appointment , go back and choose 2.","\n";
         } else {
@@ -124,7 +121,8 @@ class Application implements ApplicationInterface
     {
         echo "Please enter your national ID number for identification, and your account will be deleted!","\n";
         $nationalId = $this->userInputReader->getNationalId();
-        if ($this->databaseManager->getUserByNationalId($nationalId) !=null) {
+        $userByNationalId = $this->databaseManager->getUserByNationalId($nationalId);
+        if ($userByNationalId !=null) {
             $this->databaseManager->deletePatient($nationalId);
             echo "Account DELETED!","\n";
         } else {

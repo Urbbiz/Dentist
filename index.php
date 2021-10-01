@@ -16,5 +16,5 @@ $databaseManager = new DatabaseManager();
 $csvWriter = new CsvWriter();
 
 
-$runApp = new Application($userInputReader, $databaseManager, $csvWriter);
-$runApp->run();
+$app = new Application($userInputReader, $databaseManager, $csvWriter);
+$app->run();
