@@ -69,4 +69,10 @@ class DatabaseManager  extends Database implements DatabaseManagerInterface
         $this->connect()->exec($sql);
         echo "Patient deleted successfully";
     }
+
+    public function deleteAllPatients():void
+    {
+        $statement = $this->connect()->prepare("DELETE FROM patient");
+        $statement->execute();
+    }
 }

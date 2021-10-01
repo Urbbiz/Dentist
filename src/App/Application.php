@@ -54,7 +54,7 @@ class Application implements ApplicationInterface
         $nationalId = $this->userInputReader->getNationalId();
         $userByNationalId = $this->databaseManager->getUserByNationalId($nationalId);
             if ( $userByNationalId !=null ) {
-            echo "You already have appointment at:" .$this->databaseManager->getUserByNationalId($nationalId)->dateTime."! Go to section 2 --Edit appointment.";
+            echo "You already have appointment at:" .$userByNationalId."! Go to section 2 --Edit appointment.";
         } else {
             echo "your national ID number is $nationalId.", "\n";
 
@@ -136,21 +136,26 @@ class Application implements ApplicationInterface
         echo "Choose what you want to do:" . "\n";
         echo "Enter: 1 --Print data to this screen" . "\n";
         echo "Enter: 2 --download data to CSV file " . "\n";
+        echo "Enter: 3 --DELETE all patients list " . "\n";
 
         $input = trim(fgets(STDIN, 10));
-        if ($input == 1) {
-            echo "SEE ALL LIST OF PATIENTS" . "\n";
-            $patients = $this->databaseManager->getAllData();
-            foreach ($patients as $patient) {
-                echo "ID:" . $patient->nationalId . ". NAME:" . $patient->name . ". EMAIL:" . $patient->email . ". PHONE:" . $patient->phone . ". DATE AND TIME:" . $patient->dateTime . "\n";
-            }
-//        }
-        } elseif ($input == 2) {
-            $patients = $this->databaseManager->getAllData();
-            $this->csvWriter->exportDataToCSV($patients);
-            echo "Your data downloaded successfully!";
-        } else {
-            echo "You entered invalid input!!!";
+        switch ($input){
+            case 1:
+                echo "SEE ALL LIST OF PATIENTS" . "\n";
+                $patients = $this->databaseManager->getAllData();
+                foreach ($patients as $patient) {
+                    echo "ID:" . $patient->nationalId . ". NAME:" . $patient->name . ". EMAIL:" . $patient->email . ". PHONE:" . $patient->phone . ". DATE AND TIME:" . $patient->dateTime . "\n";
+                }
+                break;
+            case 2:
+                $patients = $this->databaseManager->getAllData();
+                $this->csvWriter->exportDataToCSV($patients);
+                echo "Your data downloaded successfully!";
+                break;
+            case 3:
+                $this->databaseManager->deleteAllPatients();
+                    echo "All patients deleted!!!!";
+                break;
         }
     }
 }

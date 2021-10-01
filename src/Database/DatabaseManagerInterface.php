@@ -17,4 +17,6 @@ interface DatabaseManagerInterface
     public function deleteDateTime($nationalId):void;
 
     public function deletePatient($nationalId): void;
+
+    public function deleteAllPatients():void;
 }
