@@ -16,7 +16,7 @@ class DatabaseManager  extends Database implements DatabaseManagerInterface
 
     public function getAllData():array
     {
-        $sql = "SELECT * FROM patient";
+        $sql = "SELECT * FROM patient ORDER BY datetime ASC";
         $statement = $this->connect()->query($sql);
         $patients = [];
         while ($row = $statement->fetch()) {
