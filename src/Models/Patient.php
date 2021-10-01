@@ -11,7 +11,7 @@ class Patient
     public string $name;
     public string $email;
     public string $phone;
-    public array $appointments;
+    public ?array $appointments;
 
 //   public function __toString(): string
 //    {

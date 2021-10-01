@@ -7,7 +7,8 @@ use Dentist\Models\Patient;
 
 class DatabaseManager  extends Database implements DatabaseManagerInterface
 {
-    public array $patients=[];
+//    public array $patients=[];
+//    public array $appointments = [];
 //PUT DATA TO DB
 //    public function addPatient($nationalId, $name, $email, $phone, $dateTime)
 //    {
@@ -65,12 +66,12 @@ class DatabaseManager  extends Database implements DatabaseManagerInterface
 
     public function getAllData():array
     {
-
         $sql = "SELECT * FROM appointments";
         $statement = $this->connect()->query($sql);
 
-        $appointments = [];
+
         $patients = [];
+        $appointments = [];
 
         while ($row = $statement->fetch()) {
             $appointment = new Appointment();
@@ -79,17 +80,19 @@ class DatabaseManager  extends Database implements DatabaseManagerInterface
             $appointment->patientId = $row['patientID'];
             $appointments[] = $appointment;
         }
+
         $sql = "SELECT * FROM patient";
         $statement = $this->connect()->query($sql);
 
         while ($row = $statement->fetch()) {
             $patient = new Patient();
+            $patient->id = $row['id'];
             $patient->nationalId = $row['nationalId'];
             $patient->name = $row['name'];
             $patient->email = $row['email'];
             $patient->phone = $row['phone'];
             foreach ($appointments as $appointment) {
-                if ($patient->id = $appointment->patientId) {
+                if ($patient->id == $appointment->patientId) {
                     $patient->appointments[] = $appointment->dateTime;
                 }
             }
