@@ -19,36 +19,47 @@ class Application implements ApplicationInterface
         $this->csvWriter = $csvWriter;
     }
 
-    public function run()
+    public function run():void
     {
-        echo "Hello! Follow instructions below:","\n";
-        echo "Enter: 1 --Register new appointment. ","\n";
-        echo "Enter: 2 --Edit appointment.","\n";
-        echo "Enter: 3 --Delete appointment.","\n";
-        echo "Enter: 4 --Delete account.","\n";
-        echo "Enter: 5 -- Only for medical personnel","\n";
+        echo "Hello! Follow instructions below:", "\n";
+        echo "Enter: 1 --Register new appointment. ", "\n";
+        echo "Enter: 2 --Edit appointment.", "\n";
+        echo "Enter: 3 --Delete appointment.", "\n";
+        echo "Enter: 4 --Delete account.", "\n";
+        echo "Enter: 5 -- Only for medical personnel", "\n";
+        echo "Enter: 6 -- QUIT", "\n";
 
-        $input = trim(fgets(STDIN, 10));
-        switch ($input) {
-            case 1:
-                $this->register();
-                break;
-            case 2:
-                $this->editAppointment();
-                break;
-            case 3:
-                $this->deleteAppointment();
-                break;
-            case 4;
-                $this->deleteAccount();
-                break;
-            case 5;
-                $this->forMedicalPersonnel();
-                break;
+        do {
+            $input = trim(fgets(STDIN, 10));
+            switch ($input) {
+                case 1:
+                    $this->register();
+                    $this->showMenu();
+                    break;
+                case 2:
+                    $this->editAppointment();
+                    $this->showMenu();
+                    break;
+                case 3:
+                    $this->deleteAppointment();
+                    $this->showMenu();
+                    break;
+                case 4;
+                    $this->deleteAccount();
+                    $this->showMenu();
+                    break;
+                case 5;
+                    $this->forMedicalPersonnel();
+                    $this->showMenu();
+                    break;
+                case 6;
+                    echo "BYE!!!";
+                    break;
+            }
+        }while($input != 6);
         }
-    }
 
-    private function register()
+    private function register():void
     {
         echo "Please enter your national ID number","\n";
         $nationalId = $this->userInputReader->getNationalId();
@@ -77,7 +88,7 @@ class Application implements ApplicationInterface
         }
     }
 
-    private function editAppointment()
+    private function editAppointment():void
     {
         echo "Please enter your national ID number for identification","\n";
         $nationalId = $this->userInputReader->getNationalId();
@@ -93,7 +104,16 @@ class Application implements ApplicationInterface
         }
     }
 
-    private function deleteAppointment()
+    private function showMenu():void
+    {
+        echo "Enter: 1 --Register new appointment. ", "\n";
+        echo "Enter: 2 --Edit appointment.", "\n";
+        echo "Enter: 3 --Delete appointment.", "\n";
+        echo "Enter: 4 --Delete account.", "\n";
+        echo "Enter: 5 -- Only for medical personnel", "\n";
+        echo "Enter: 6 -- QUIT", "\n";
+    }
+    private function deleteAppointment():void
     {
         echo "Please enter your national ID number for identification, and your appointment will be deleted!","\n";
         $nationalId = $this->userInputReader->getNationalId();
@@ -105,7 +125,7 @@ class Application implements ApplicationInterface
         }
     }
 
-    private function deleteAccount()
+    private function deleteAccount():void
     {
         echo "Please enter your national ID number for identification, and your account will be deleted!","\n";
         $nationalId = $this->userInputReader->getNationalId();
@@ -117,7 +137,7 @@ class Application implements ApplicationInterface
         }
     }
 
-    private function forMedicalPersonnel()
+    private function forMedicalPersonnel():void
     {
         echo "You reached medical personnel data" . "\n" . "\n";
         echo "Choose what you want to do:" . "\n";
