@@ -5,7 +5,7 @@ namespace Dentist\Database;
 use PDO;
 use PDOException;
 
-class Database
+class Database implements DatabaseInterface
 {
     private string $userName = "root";
     private string $serverName = "localhost";
