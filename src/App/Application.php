@@ -144,7 +144,11 @@ class Application implements ApplicationInterface
                 echo "SEE ALL LIST OF PATIENTS" . "\n";
                 $patients = $this->databaseManager->getAllData();
                 foreach ($patients as $patient) {
-                    echo "ID:" . $patient->nationalId . ". NAME:" . $patient->name . ". EMAIL:" . $patient->email . ". PHONE:" . $patient->phone . ". DATE AND TIME:" . $patient->dateTime . "\n";
+                    echo "ID:" . $patient->nationalId . ". NAME:" . $patient->name . ". EMAIL:" . $patient->email . ". PHONE:" . $patient->phone;
+                        foreach ($patient->appointments as $appointment) {
+                                echo ". DATE AND TIME:" . $appointment . "\n";
+
+                        }
                 }
                 break;
             case 2:

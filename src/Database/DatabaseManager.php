@@ -2,33 +2,29 @@
 
 namespace Dentist\Database;
 
+use Dentist\Models\Appointment;
 use Dentist\Models\Patient;
 
 class DatabaseManager  extends Database implements DatabaseManagerInterface
 {
     public array $patients=[];
 //PUT DATA TO DB
+//    public function addPatient($nationalId, $name, $email, $phone, $dateTime)
+//    {
+//        $statement = $this->connect()->prepare("INSERT INTO patient(nationalId,name,email,phone,datetime)VALUES  (?, ?, ?, ?, ?)");
+//        $statement->execute([$nationalId, $name, $email, $phone, $dateTime]);
+//    }
+
     public function addPatient($nationalId, $name, $email, $phone, $dateTime)
     {
-        $statement = $this->connect()->prepare("INSERT INTO patient(nationalId,name,email,phone,datetime)VALUES  (?, ?, ?, ?, ?)");
-        $statement->execute([$nationalId, $name, $email, $phone, $dateTime]);
-    }
+        $statement = $this->connect()->prepare("INSERT INTO patient(nationalId,name,email,phone) VALUES  (?, ?, ?, ?)");
+        $statement->execute([$nationalId, $name, $email, $phone]);
 
-    public function getAllData():array
-    {
-        $sql = "SELECT * FROM patient ORDER BY datetime ASC";
-        $statement = $this->connect()->query($sql);
-        $patients = [];
-        while ($row = $statement->fetch()) {
-            $patient = new Patient();
-            $patient->nationalId = $row['nationalId'];
-            $patient->name = $row['name'];
-            $patient->email = $row['email'];
-            $patient->phone = $row['phone'];
-            $patient->dateTime = $row['datetime'];
-            $patients[] = $patient;
-        }
-        return $patients;
+        $patient =$this->getUserByNationalId($nationalId);
+        $statement = $this->connect()->prepare("INSERT INTO appointments(datetime,patientID) VALUES  (?,?)");
+        $statement->execute([$dateTime,$patient->id]);
+
+
     }
 
     public function getUserByNationalId($nationalId):?Patient
@@ -39,6 +35,7 @@ class DatabaseManager  extends Database implements DatabaseManagerInterface
         $row = $statement->fetch();
         if ($row != false){
             $patient = new Patient();
+            $patient->id = $row['id'];
             $patient->nationalId = $row['nationalId'];
             $patient->name = $row['name'];
             $patient->email = $row['email'];
@@ -48,6 +45,62 @@ class DatabaseManager  extends Database implements DatabaseManagerInterface
         }
         return null;
     }
+
+//    public function getAllData():array
+//    {
+//        $sql = "SELECT * FROM patient ORDER BY datetime ASC";
+//        $statement = $this->connect()->query($sql);
+//        $patients = [];
+//        while ($row = $statement->fetch()) {
+//            $patient = new Patient();
+//            $patient->nationalId = $row['nationalId'];
+//            $patient->name = $row['name'];
+//            $patient->email = $row['email'];
+//            $patient->phone = $row['phone'];
+//            $patient->dateTime = $row['datetime'];
+//            $patients[] = $patient;
+//        }
+//        return $patients;
+//    }
+
+    public function getAllData():array
+    {
+
+        $sql = "SELECT * FROM appointments";
+        $statement = $this->connect()->query($sql);
+
+        $appointments = [];
+        $patients = [];
+
+        while ($row = $statement->fetch()) {
+            $appointment = new Appointment();
+            $appointment->id = $row['ID'];
+            $appointment->dateTime = $row['datetime'];
+            $appointment->patientId = $row['patientID'];
+            $appointments[] = $appointment;
+        }
+        $sql = "SELECT * FROM patient";
+        $statement = $this->connect()->query($sql);
+
+        while ($row = $statement->fetch()) {
+            $patient = new Patient();
+            $patient->nationalId = $row['nationalId'];
+            $patient->name = $row['name'];
+            $patient->email = $row['email'];
+            $patient->phone = $row['phone'];
+            foreach ($appointments as $appointment) {
+                if ($patient->id = $appointment->patientId) {
+                    $patient->appointments[] = $appointment->dateTime;
+                }
+            }
+            $patients[] = $patient;
+        }
+        var_dump($patients);
+        return $patients;
+
+    }
+
+
 
     public function editDateTime($newDateTime, $nationalId):void
     {
