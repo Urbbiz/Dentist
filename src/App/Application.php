@@ -30,7 +30,7 @@ class Application implements ApplicationInterface
                     $this->register();
                     break;
                 case 2:
-                    $this->editAppointment();
+                    $this->addAppointment();
                     break;
                 case 3:
                     $this->deleteAppointment();
@@ -78,18 +78,24 @@ class Application implements ApplicationInterface
         }
     }
 
-    private function editAppointment():void
+    private function addAppointment():void
     {
         echo "Please enter your national ID number for identification","\n";
         $nationalId = $this->userInputReader->getNationalId();
         $userByNationalId = $this->databaseManager->getUserByNationalId($nationalId);
         if ($userByNationalId !=null) {
-            echo "your current appointment is:  $userByNationalId->dateTime.","\n";
-
-            echo"Please change appointment date and time","\n";
+            echo "your appointments: " . "\n";
+            $appointments = $userByNationalId->appointments;
+//            $index = 0;
+            foreach ($appointments as $key => $appointment) {
+                $index = $key+1;
+                echo "No: $index. date and time: $appointment.", "\n";
+            }
+            echo"Please add new appointment date and time","\n";
             $newDateTime = trim(fgets(STDIN, 20));
-            $this->databaseManager->editDateTime($newDateTime, $nationalId);
-            echo "New appointment date and time is: $newDateTime";
+//            $this->databaseManager->editDateTime($newDateTime, $nationalId);
+            $this->databaseManager->addAppointment($nationalId, $newDateTime);
+            echo "New appointment date and time is: $newDateTime" . "\n";
         } else {
             echo "You are not in our database. Please choose 1 from main menu, and create your appointment!"."\n";
         }
@@ -98,7 +104,7 @@ class Application implements ApplicationInterface
     private function showMenu():void
     {
         echo "Enter: 1 --Register new appointment. ", "\n";
-        echo "Enter: 2 --Edit appointment.", "\n";
+        echo "Enter: 2 --Add new appointment.", "\n";
         echo "Enter: 3 --Delete appointment.", "\n";
         echo "Enter: 4 --Delete account.", "\n";
         echo "Enter: 5 -- Only for medical personnel", "\n";
@@ -145,8 +151,9 @@ class Application implements ApplicationInterface
                 $patients = $this->databaseManager->getAllData();
                 foreach ($patients as $patient) {
                     echo "ID:" . $patient->nationalId . ". NAME:" . $patient->name . ". EMAIL:" . $patient->email . ". PHONE:" . $patient->phone."\n";
-                    foreach ($patient->appointments as $appointment) {
-                                echo "DATE AND TIME:" . $appointment . "\n";
+                    foreach ($patient->appointments as $key=> $appointment) {
+                        $index = $key+1;
+                                echo "No: $index. DATE AND TIME:" . $appointment . "\n";
                         }
                 }
                 break;

@@ -28,8 +28,45 @@ class DatabaseManager  extends Database implements DatabaseManagerInterface
 
     }
 
+    public function addAppointment($nationalId, $dateTime)
+    {
+        $patient =$this->getUserByNationalId($nationalId);
+        $statement = $this->connect()->prepare("INSERT INTO appointments(datetime,patientID) VALUES  (?,?)");
+        $statement->execute([$dateTime,$patient->id]);
+    }
+
+//    public function getUserByNationalId($nationalId):?Patient
+//    {
+//        $statement = $this->connect()->prepare("SELECT * FROM patient WHERE nationalId=?");
+//        $statement->execute([$nationalId]);
+//
+//        $row = $statement->fetch();
+//        if ($row != false){
+//            $patient = new Patient();
+//            $patient->id = $row['id'];
+//            $patient->nationalId = $row['nationalId'];
+//            $patient->name = $row['name'];
+//            $patient->email = $row['email'];
+//            $patient->phone = $row['phone'];
+//            $patient->dateTime = $row['datetime'];
+//            return $patient;
+//        }
+//        return null;
+//    }
+
     public function getUserByNationalId($nationalId):?Patient
     {
+        $sql = "SELECT * FROM appointments";
+        $statement = $this->connect()->query($sql);
+        $appointments = [];
+        while ($row = $statement->fetch()) {
+            $appointment = new Appointment();
+            $appointment->id = $row['ID'];
+            $appointment->dateTime = $row['datetime'];
+            $appointment->patientId = $row['patientID'];
+            $appointments[] = $appointment;
+        }
+
         $statement = $this->connect()->prepare("SELECT * FROM patient WHERE nationalId=?");
         $statement->execute([$nationalId]);
 
@@ -41,7 +78,12 @@ class DatabaseManager  extends Database implements DatabaseManagerInterface
             $patient->name = $row['name'];
             $patient->email = $row['email'];
             $patient->phone = $row['phone'];
-            $patient->dateTime = $row['datetime'];
+            foreach ($appointments as $appointment) {
+                if ($patient->id == $appointment->patientId) {
+                    $patient->appointments[] = $appointment->dateTime;
+//                    $patient->appointments->id = $appointment->id;
+                }
+            }
             return $patient;
         }
         return null;
@@ -98,9 +140,7 @@ class DatabaseManager  extends Database implements DatabaseManagerInterface
             }
             $patients[] = $patient;
         }
-        var_dump($patients);
         return $patients;
-
     }
 
 

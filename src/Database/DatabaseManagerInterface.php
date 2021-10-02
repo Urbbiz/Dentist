@@ -8,6 +8,8 @@ interface DatabaseManagerInterface
 {
     public function addPatient($nationalId, $name, $email, $phone, $dateTime);
 
+    public function addAppointment($nationalId, $dateTime);
+
     public function getAllData():array;
 
     public function getUserByNationalId($nationalId):?Patient;
