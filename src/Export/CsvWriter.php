@@ -18,7 +18,10 @@ class CsvWriter implements CsvWriterInterface
 
         // Output each row of the data, format line as csv and write to file pointer
         foreach ($patients as $patient) {
-            $lineData = [ $patient->nationalId, $patient->name, $patient->email, $patient->phone, $patient->dateTime ];
+            $lineData = [ $patient->nationalId, $patient->name, $patient->email, $patient->phone, ];
+            foreach ($patient->appointments as $appointment) {
+                $lineData[]= $appointment;
+            }
             fputcsv($f, $lineData, $delimiter);
         }
         // Move back to beginning of file
