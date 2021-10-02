@@ -21,7 +21,6 @@ class Application implements ApplicationInterface
 
     public function run():void
     {
-
         echo "Hello! Follow instructions below:", "\n";
         do {
             $this->showMenu();
@@ -87,14 +86,12 @@ class Application implements ApplicationInterface
         if ($userByNationalId !=null) {
             echo "your appointments: " . "\n";
             $appointments = $userByNationalId->appointments;
-//            $index = 0;
             foreach ($appointments as $key => $appointment) {
                 $index = $key+1;
                 echo "No: $index. date and time: $appointment.", "\n";
             }
             echo"Please add new appointment date and time","\n";
             $newDateTime = trim(fgets(STDIN, 20));
-//            $this->databaseManager->editDateTime($newDateTime, $nationalId);
             $this->databaseManager->addAppointment($nationalId, $newDateTime);
             echo "New appointment date and time is: $newDateTime" . "\n";
         } else {
@@ -167,7 +164,7 @@ class Application implements ApplicationInterface
                 echo "Your data downloaded successfully!";
                 break;
             case 3:
-                $this->databaseManager->deleteAllPatients();
+                $this->databaseManager->deleteAllPatientsAndAppointments();
                     echo "All patients deleted!!!!";
                 break;
         }

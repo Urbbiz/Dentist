@@ -9,7 +9,7 @@ class DatabaseManager  extends Database implements DatabaseManagerInterface
 {
 
 
-    public function addPatient($nationalId, $name, $email, $phone, $dateTime)
+    public function addPatient($nationalId, $name, $email, $phone, $dateTime):void
     {
         $statement = $this->connect()->prepare("INSERT INTO patient(nationalId,name,email,phone) VALUES  (?, ?, ?, ?)");
         $statement->execute([$nationalId, $name, $email, $phone]);
@@ -17,11 +17,9 @@ class DatabaseManager  extends Database implements DatabaseManagerInterface
         $patient =$this->getUserByNationalId($nationalId);
         $statement = $this->connect()->prepare("INSERT INTO appointments(datetime,patientID) VALUES  (?,?)");
         $statement->execute([$dateTime,$patient->id]);
-
-
     }
 
-    public function addAppointment($nationalId, $dateTime)
+    public function addAppointment($nationalId, $dateTime):void
     {
         $patient =$this->getUserByNationalId($nationalId);
         $statement = $this->connect()->prepare("INSERT INTO appointments(datetime,patientID) VALUES  (?,?)");
@@ -99,15 +97,12 @@ class DatabaseManager  extends Database implements DatabaseManagerInterface
         return $patients;
     }
 
-
-
-    public function editDateTime($newDateTime, $nationalId):void
-    {
-//    $sql = "UPDATE patient SET datetime=? WHERE nationalId='$nationalId'";
-        $statement = $this->connect()->prepare("UPDATE patient SET datetime=? WHERE nationalId=?");
-        $statement->execute([$newDateTime, $nationalId]);
-    }
-
+//    public function editDateTime($newDateTime, $nationalId):void
+//    {
+////    $sql = "UPDATE patient SET datetime=? WHERE nationalId='$nationalId'";
+//        $statement = $this->connect()->prepare("UPDATE patient SET datetime=? WHERE nationalId=?");
+//        $statement->execute([$newDateTime, $nationalId]);
+//    }
 
     public function deletePatient($nationalId): void
     {
@@ -123,8 +118,11 @@ class DatabaseManager  extends Database implements DatabaseManagerInterface
         echo "\n"."Appointments deleted successfully". "\n";
     }
 
-    public function deleteAllPatients():void
+    public function deleteAllPatientsAndAppointments():void
     {
+        $statement = $this->connect()->prepare("DELETE FROM appointments");
+        $statement->execute();
+
         $statement = $this->connect()->prepare("DELETE FROM patient");
         $statement->execute();
     }
