@@ -16,7 +16,7 @@ interface DatabaseManagerInterface
 
     public function editDateTime($newDateTime, $nationalId):void;
 
-    public function deleteDateTime($nationalId):void;
+    public function deleteAppointment($patientId): void;
 
     public function deletePatient($nationalId): void;
 

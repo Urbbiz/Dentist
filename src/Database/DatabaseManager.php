@@ -7,14 +7,7 @@ use Dentist\Models\Patient;
 
 class DatabaseManager  extends Database implements DatabaseManagerInterface
 {
-//    public array $patients=[];
-//    public array $appointments = [];
-//PUT DATA TO DB
-//    public function addPatient($nationalId, $name, $email, $phone, $dateTime)
-//    {
-//        $statement = $this->connect()->prepare("INSERT INTO patient(nationalId,name,email,phone,datetime)VALUES  (?, ?, ?, ?, ?)");
-//        $statement->execute([$nationalId, $name, $email, $phone, $dateTime]);
-//    }
+
 
     public function addPatient($nationalId, $name, $email, $phone, $dateTime)
     {
@@ -35,24 +28,6 @@ class DatabaseManager  extends Database implements DatabaseManagerInterface
         $statement->execute([$dateTime,$patient->id]);
     }
 
-//    public function getUserByNationalId($nationalId):?Patient
-//    {
-//        $statement = $this->connect()->prepare("SELECT * FROM patient WHERE nationalId=?");
-//        $statement->execute([$nationalId]);
-//
-//        $row = $statement->fetch();
-//        if ($row != false){
-//            $patient = new Patient();
-//            $patient->id = $row['id'];
-//            $patient->nationalId = $row['nationalId'];
-//            $patient->name = $row['name'];
-//            $patient->email = $row['email'];
-//            $patient->phone = $row['phone'];
-//            $patient->dateTime = $row['datetime'];
-//            return $patient;
-//        }
-//        return null;
-//    }
 
     public function getUserByNationalId($nationalId):?Patient
     {
@@ -89,29 +64,10 @@ class DatabaseManager  extends Database implements DatabaseManagerInterface
         return null;
     }
 
-//    public function getAllData():array
-//    {
-//        $sql = "SELECT * FROM patient ORDER BY datetime ASC";
-//        $statement = $this->connect()->query($sql);
-//        $patients = [];
-//        while ($row = $statement->fetch()) {
-//            $patient = new Patient();
-//            $patient->nationalId = $row['nationalId'];
-//            $patient->name = $row['name'];
-//            $patient->email = $row['email'];
-//            $patient->phone = $row['phone'];
-//            $patient->dateTime = $row['datetime'];
-//            $patients[] = $patient;
-//        }
-//        return $patients;
-//    }
-
     public function getAllData():array
     {
         $sql = "SELECT * FROM appointments";
         $statement = $this->connect()->query($sql);
-
-
         $patients = [];
         $appointments = [];
 
@@ -153,17 +109,18 @@ class DatabaseManager  extends Database implements DatabaseManagerInterface
     }
 
 
-    public function deleteDateTime($nationalId):void
-    {
-        $statement = $this->connect()->prepare("UPDATE patient SET datetime=NULL WHERE nationalId=?");
-        $statement->execute([$nationalId]);
-    }
-
     public function deletePatient($nationalId): void
     {
         $sql = "DELETE FROM patient WHERE nationalId ='$nationalId'";
         $this->connect()->exec($sql);
         echo "Patient deleted successfully";
+    }
+
+    public function deleteAppointment($patientId): void
+    {
+        $sql = "DELETE FROM appointments WHERE patientID ='$patientId'";
+        $this->connect()->exec($sql);
+        echo "\n"."Appointments deleted successfully". "\n";
     }
 
     public function deleteAllPatients():void

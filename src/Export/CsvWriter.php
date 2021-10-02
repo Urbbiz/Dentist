@@ -20,6 +20,7 @@ class CsvWriter implements CsvWriterInterface
         foreach ($patients as $patient) {
             $lineData = [ $patient->nationalId, $patient->name, $patient->email, $patient->phone, ];
             foreach ($patient->appointments as $appointment) {
+                
                 $lineData[]= $appointment;
             }
             fputcsv($f, $lineData, $delimiter);

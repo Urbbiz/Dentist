@@ -21,6 +21,7 @@ class Application implements ApplicationInterface
 
     public function run():void
     {
+
         echo "Hello! Follow instructions below:", "\n";
         do {
             $this->showMenu();
@@ -36,7 +37,7 @@ class Application implements ApplicationInterface
                     $this->deleteAppointment();
                     break;
                 case 4;
-                    $this->deleteAccount();
+                    $this->deleteAccountAndAppointments();
                     break;
                 case 5;
                     $this->forMedicalPersonnel();
@@ -103,32 +104,35 @@ class Application implements ApplicationInterface
 
     private function showMenu():void
     {
-        echo "Enter: 1 --Register new appointment. ", "\n";
+        echo "Enter: 1 --Register new user and first appointment. ", "\n";
         echo "Enter: 2 --Add new appointment.", "\n";
-        echo "Enter: 3 --Delete appointment.", "\n";
+        echo "Enter: 3 --Delete appointments.", "\n";
         echo "Enter: 4 --Delete account.", "\n";
         echo "Enter: 5 -- Only for medical personnel", "\n";
         echo "Enter: 6 -- QUIT", "\n";
     }
     private function deleteAppointment():void
     {
-        echo "Please enter your national ID number for identification, and your appointment will be deleted!","\n";
+        echo "Please enter your national ID number for identification, and your appointments will be deleted!","\n";
         $nationalId = $this->userInputReader->getNationalId();
         $userByNationalId = $this->databaseManager->getUserByNationalId($nationalId);
+        $patientId = $userByNationalId->id;
         if ($userByNationalId !=null) {
-            $this->databaseManager->deleteDateTime($nationalId);
+            $this->databaseManager->deleteAppointment($patientId);
             echo "your appointment date and time deleted!!! If you want to set new appointment , go back and choose 2.","\n";
         } else {
             echo "Nothing to delete.You are not in our database!!!";
         }
     }
 
-    private function deleteAccount():void
+    private function deleteAccountAndAppointments():void
     {
         echo "Please enter your national ID number for identification, and your account will be deleted!","\n";
         $nationalId = $this->userInputReader->getNationalId();
         $userByNationalId = $this->databaseManager->getUserByNationalId($nationalId);
+        $patientId = $userByNationalId->id;
         if ($userByNationalId !=null) {
+            $this->databaseManager->deleteAppointment($patientId);
             $this->databaseManager->deletePatient($nationalId);
             echo "Account DELETED!","\n";
         } else {
