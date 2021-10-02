@@ -30,13 +30,13 @@ class Application implements ApplicationInterface
                     $this->register();
                     break;
                 case 2:
-                    $this->editAppointment();
+                    $this->addAppointment();
                     break;
                 case 3:
                     $this->deleteAppointment();
                     break;
                 case 4;
-                    $this->deleteAccount();
+                    $this->deleteAccountAndAppointments();
                     break;
                 case 5;
                     $this->forMedicalPersonnel();
@@ -78,18 +78,22 @@ class Application implements ApplicationInterface
         }
     }
 
-    private function editAppointment():void
+    private function addAppointment():void
     {
         echo "Please enter your national ID number for identification","\n";
         $nationalId = $this->userInputReader->getNationalId();
         $userByNationalId = $this->databaseManager->getUserByNationalId($nationalId);
         if ($userByNationalId !=null) {
-            echo "your current appointment is:  $userByNationalId->dateTime.","\n";
-
-            echo"Please change appointment date and time","\n";
+            echo "your appointments: " . "\n";
+            $appointments = $userByNationalId->appointments;
+            foreach ($appointments as $key => $appointment) {
+                $index = $key+1;
+                echo "No: $index. date and time: $appointment.", "\n";
+            }
+            echo"Please add new appointment date and time","\n";
             $newDateTime = trim(fgets(STDIN, 20));
-            $this->databaseManager->editDateTime($newDateTime, $nationalId);
-            echo "New appointment date and time is: $newDateTime";
+            $this->databaseManager->addAppointment($nationalId, $newDateTime);
+            echo "New appointment date and time is: $newDateTime" . "\n";
         } else {
             echo "You are not in our database. Please choose 1 from main menu, and create your appointment!"."\n";
         }
@@ -97,32 +101,35 @@ class Application implements ApplicationInterface
 
     private function showMenu():void
     {
-        echo "Enter: 1 --Register new appointment. ", "\n";
-        echo "Enter: 2 --Edit appointment.", "\n";
-        echo "Enter: 3 --Delete appointment.", "\n";
+        echo "Enter: 1 --Register new user and first appointment. ", "\n";
+        echo "Enter: 2 --Add new appointment.", "\n";
+        echo "Enter: 3 --Delete appointments.", "\n";
         echo "Enter: 4 --Delete account.", "\n";
         echo "Enter: 5 -- Only for medical personnel", "\n";
         echo "Enter: 6 -- QUIT", "\n";
     }
     private function deleteAppointment():void
     {
-        echo "Please enter your national ID number for identification, and your appointment will be deleted!","\n";
+        echo "Please enter your national ID number for identification, and your appointments will be deleted!","\n";
         $nationalId = $this->userInputReader->getNationalId();
         $userByNationalId = $this->databaseManager->getUserByNationalId($nationalId);
+        $patientId = $userByNationalId->id;
         if ($userByNationalId !=null) {
-            $this->databaseManager->deleteDateTime($nationalId);
+            $this->databaseManager->deleteAppointment($patientId);
             echo "your appointment date and time deleted!!! If you want to set new appointment , go back and choose 2.","\n";
         } else {
             echo "Nothing to delete.You are not in our database!!!";
         }
     }
 
-    private function deleteAccount():void
+    private function deleteAccountAndAppointments():void
     {
         echo "Please enter your national ID number for identification, and your account will be deleted!","\n";
         $nationalId = $this->userInputReader->getNationalId();
         $userByNationalId = $this->databaseManager->getUserByNationalId($nationalId);
+        $patientId = $userByNationalId->id;
         if ($userByNationalId !=null) {
+            $this->databaseManager->deleteAppointment($patientId);
             $this->databaseManager->deletePatient($nationalId);
             echo "Account DELETED!","\n";
         } else {
@@ -144,7 +151,11 @@ class Application implements ApplicationInterface
                 echo "SEE ALL LIST OF PATIENTS" . "\n";
                 $patients = $this->databaseManager->getAllData();
                 foreach ($patients as $patient) {
-                    echo "ID:" . $patient->nationalId . ". NAME:" . $patient->name . ". EMAIL:" . $patient->email . ". PHONE:" . $patient->phone . ". DATE AND TIME:" . $patient->dateTime . "\n";
+                    echo "ID:" . $patient->nationalId . ". NAME:" . $patient->name . ". EMAIL:" . $patient->email . ". PHONE:" . $patient->phone."\n";
+                    foreach ($patient->appointments as $key=> $appointment) {
+                        $index = $key+1;
+                                echo "No: $index. DATE AND TIME:" . $appointment . "\n";
+                        }
                 }
                 break;
             case 2:
@@ -153,7 +164,7 @@ class Application implements ApplicationInterface
                 echo "Your data downloaded successfully!";
                 break;
             case 3:
-                $this->databaseManager->deleteAllPatients();
+                $this->databaseManager->deleteAllPatientsAndAppointments();
                     echo "All patients deleted!!!!";
                 break;
         }

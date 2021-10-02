@@ -2,66 +2,107 @@
 
 namespace Dentist\Database;
 
+use Dentist\Models\Appointment;
 use Dentist\Models\Patient;
 
 class DatabaseManager  extends Database implements DatabaseManagerInterface
 {
-    public array $patients=[];
-//PUT DATA TO DB
-    public function addPatient($nationalId, $name, $email, $phone, $dateTime)
+
+
+    public function addPatient($nationalId, $name, $email, $phone, $dateTime):void
     {
-        $statement = $this->connect()->prepare("INSERT INTO patient(nationalId,name,email,phone,datetime)VALUES  (?, ?, ?, ?, ?)");
-        $statement->execute([$nationalId, $name, $email, $phone, $dateTime]);
+        $statement = $this->connect()->prepare("INSERT INTO patient(nationalId,name,email,phone) VALUES  (?, ?, ?, ?)");
+        $statement->execute([$nationalId, $name, $email, $phone]);
+
+        $patient =$this->getUserByNationalId($nationalId);
+        $statement = $this->connect()->prepare("INSERT INTO appointments(datetime,patientID) VALUES  (?,?)");
+        $statement->execute([$dateTime,$patient->id]);
     }
 
-    public function getAllData():array
+    public function addAppointment($nationalId, $dateTime):void
     {
-        $sql = "SELECT * FROM patient ORDER BY datetime ASC";
-        $statement = $this->connect()->query($sql);
-        $patients = [];
-        while ($row = $statement->fetch()) {
-            $patient = new Patient();
-            $patient->nationalId = $row['nationalId'];
-            $patient->name = $row['name'];
-            $patient->email = $row['email'];
-            $patient->phone = $row['phone'];
-            $patient->dateTime = $row['datetime'];
-            $patients[] = $patient;
-        }
-        return $patients;
+        $patient =$this->getUserByNationalId($nationalId);
+        $statement = $this->connect()->prepare("INSERT INTO appointments(datetime,patientID) VALUES  (?,?)");
+        $statement->execute([$dateTime,$patient->id]);
     }
+
 
     public function getUserByNationalId($nationalId):?Patient
     {
+        $sql = "SELECT * FROM appointments";
+        $statement = $this->connect()->query($sql);
+        $appointments = [];
+        while ($row = $statement->fetch()) {
+            $appointment = new Appointment();
+            $appointment->id = $row['ID'];
+            $appointment->dateTime = $row['datetime'];
+            $appointment->patientId = $row['patientID'];
+            $appointments[] = $appointment;
+        }
+
         $statement = $this->connect()->prepare("SELECT * FROM patient WHERE nationalId=?");
         $statement->execute([$nationalId]);
 
         $row = $statement->fetch();
         if ($row != false){
             $patient = new Patient();
+            $patient->id = $row['id'];
             $patient->nationalId = $row['nationalId'];
             $patient->name = $row['name'];
             $patient->email = $row['email'];
             $patient->phone = $row['phone'];
-            $patient->dateTime = $row['datetime'];
+            foreach ($appointments as $appointment) {
+                if ($patient->id == $appointment->patientId) {
+                    $patient->appointments[] = $appointment->dateTime;
+//                    $patient->appointments->id = $appointment->id;
+                }
+            }
             return $patient;
         }
         return null;
     }
 
-    public function editDateTime($newDateTime, $nationalId):void
+    public function getAllData():array
     {
-//    $sql = "UPDATE patient SET datetime=? WHERE nationalId='$nationalId'";
-        $statement = $this->connect()->prepare("UPDATE patient SET datetime=? WHERE nationalId=?");
-        $statement->execute([$newDateTime, $nationalId]);
+        $sql = "SELECT * FROM appointments";
+        $statement = $this->connect()->query($sql);
+        $patients = [];
+        $appointments = [];
+
+        while ($row = $statement->fetch()) {
+            $appointment = new Appointment();
+            $appointment->id = $row['ID'];
+            $appointment->dateTime = $row['datetime'];
+            $appointment->patientId = $row['patientID'];
+            $appointments[] = $appointment;
+        }
+
+        $sql = "SELECT * FROM patient";
+        $statement = $this->connect()->query($sql);
+
+        while ($row = $statement->fetch()) {
+            $patient = new Patient();
+            $patient->id = $row['id'];
+            $patient->nationalId = $row['nationalId'];
+            $patient->name = $row['name'];
+            $patient->email = $row['email'];
+            $patient->phone = $row['phone'];
+            foreach ($appointments as $appointment) {
+                if ($patient->id == $appointment->patientId) {
+                    $patient->appointments[] = $appointment->dateTime;
+                }
+            }
+            $patients[] = $patient;
+        }
+        return $patients;
     }
 
-
-    public function deleteDateTime($nationalId):void
-    {
-        $statement = $this->connect()->prepare("UPDATE patient SET datetime=NULL WHERE nationalId=?");
-        $statement->execute([$nationalId]);
-    }
+//    public function editDateTime($newDateTime, $nationalId):void
+//    {
+////    $sql = "UPDATE patient SET datetime=? WHERE nationalId='$nationalId'";
+//        $statement = $this->connect()->prepare("UPDATE patient SET datetime=? WHERE nationalId=?");
+//        $statement->execute([$newDateTime, $nationalId]);
+//    }
 
     public function deletePatient($nationalId): void
     {
@@ -70,8 +111,18 @@ class DatabaseManager  extends Database implements DatabaseManagerInterface
         echo "Patient deleted successfully";
     }
 
-    public function deleteAllPatients():void
+    public function deleteAppointment($patientId): void
     {
+        $sql = "DELETE FROM appointments WHERE patientID ='$patientId'";
+        $this->connect()->exec($sql);
+        echo "\n"."Appointments deleted successfully". "\n";
+    }
+
+    public function deleteAllPatientsAndAppointments():void
+    {
+        $statement = $this->connect()->prepare("DELETE FROM appointments");
+        $statement->execute();
+
         $statement = $this->connect()->prepare("DELETE FROM patient");
         $statement->execute();
     }

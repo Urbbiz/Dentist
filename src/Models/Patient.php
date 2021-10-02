@@ -2,6 +2,8 @@
 
 namespace Dentist\Models;
 
+//use Dentist\Models\Appointment;
+
 class Patient
 {
     public int $id;
@@ -9,5 +11,13 @@ class Patient
     public string $name;
     public string $email;
     public string $phone;
-    public ?string $dateTime;
+    public ?array $appointments = [];
+
+
+//   public function __toString(): string
+//    {
+//        return $this->appointments;
+//
+//    }
 }
+
