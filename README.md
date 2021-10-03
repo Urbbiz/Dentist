@@ -9,6 +9,19 @@
 ##### START PROGRAM
 - In CLI type: php index.php
 
+## Project features
+- VANILLA PHP
+- MYSQL
+- PHPUnit
+- PSR-4
+- PSR-3
+- PSR-12
+- OOP
+
+- Validations (valid email, phone number, identification number)
+- Ability to import/export appointments in .csv format. Example of .csv file added to repository.
+
+
 Application  store these fields:
 - ID
 - Name
@@ -25,17 +38,6 @@ Application have the following functionality.
 - Print list of appointments in CSV file.
 
 
-## Project features
-- VANILLA PHP
-- MYSQL
-- PHPUnit
-- PSR-4
-- PSR-3
-- PSR-12
-- OOP
-
-- Validations (valid email, phone number, identification number)
-- Ability to import/export appointments in .csv format. Example of .csv file added to repository.
 
 
 ## Authors
