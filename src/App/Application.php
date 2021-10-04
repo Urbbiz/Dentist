@@ -54,7 +54,7 @@ class Application implements ApplicationInterface
         $nationalId = $this->userInputReader->getNationalId();
         $userByNationalId = $this->databaseManager->getUserByNationalId($nationalId);
             if ( $userByNationalId !=null ) {
-            echo "You already have appointment at:" .$userByNationalId."! Go to section 2 --Edit appointment.";
+            echo "You already have appointment at: $userByNationalId ! Go to section 2 --Edit appointment.";
         } else {
             echo "your national ID number is $nationalId.", "\n";
 
