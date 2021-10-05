@@ -65,19 +65,72 @@ class InputValidationTest extends TestCase
         $this->assertEquals(1, $nationalId);
     }
 
-
     public function testNameTrue()
     {
         $name = $this->inputValidation->name("Andrius Molingas");
         $this->assertEquals("Andrius Molingas", $name);
     }
 
-
-
     public function testNameFalse()
     {
         $name = $this->inputValidation->name("1233132");
         $this->assertEquals(false, $name);
+    }
+
+    public function testNameEmpty()
+    {
+        $name = $this->inputValidation->name("");
+        $this->assertEquals(1, $name);
+    }
+
+    public function testEmailTrue()
+    {
+        $email = $this->inputValidation->email("email@aa.tt");
+        $this->assertEquals("email@aa.tt", $email);
+        $this->assertSame("email@aa.tt", $email);
+    }
+
+    public function testEmailFalse()
+    {
+        $email = $this->inputValidation->email("email13133aa.tt");
+        $this->assertEquals(false, $email);
+    }
+
+    public function testEmailEmpty()
+    {
+        $email = $this->inputValidation->email("");
+        $this->assertEquals(1, $email);
+    }
+
+    public function testPhoneTrue()
+    {
+        $phone = $this->inputValidation->phone("831353258");
+        $this->assertEquals("831353258",$phone);
+        $this->assertSame("831353258", $phone);
+    }
+
+    public function testPhoneFalse()
+    {
+        $phone = $this->inputValidation->phone("not valid number");
+        $this->assertEquals(false, $phone);
+    }
+
+    public function testPhoneEmpty()
+    {
+        $phone = $this->inputValidation->phone("");
+        $this->assertEquals(1, $phone);
+    }
+
+    public function testDateTimeFalse()
+    {
+        $dateTime = $this->inputValidation->dateTime("2030.12.12 25:00");
+        $this->assertEquals(false, $dateTime);
+    }
+
+    public function testDateTimeEmpty()
+    {
+        $dateTime = $this->inputValidation->dateTime("");
+        $this->assertEquals(1, $dateTime);
     }
 
 }
